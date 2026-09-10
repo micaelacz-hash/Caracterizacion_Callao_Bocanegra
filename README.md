@@ -121,7 +121,7 @@ oficial, y debe interpretarse como una aproximación, no como el indicador censa
 oficial.
 
 ## 4. Resultados descriptivos (213 manzanas, base acondicionada final)
-
+```text
 | Indicador | Valor |
 |---|---|
 | Población total | 43,708 habitantes |
@@ -132,6 +132,7 @@ oficial.
 | Tipo de vivienda predominante | Casa independiente (86.7%) |
 | Tenencia — vivienda propia con título | 55.3% |
 | Tenencia — vivienda alquilada | 27.2% |
+```
 
 ## 5. Uso posterior de esta base
 
