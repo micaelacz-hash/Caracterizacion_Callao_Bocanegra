@@ -1,0 +1,43 @@
+Reporte de valores NA - resumen_manzanas_bocanegra.csv
+Generado: 2026-09-10 15:55 
+Filas: 215  | Columnas: 38 
+
+Columnas con al menos 1 NA:
+                                                        variable n_na pct_na
+                                                     sexo_hombre    2    0.9
+                                                      sexo_mujer    2    0.9
+                                      tipoviv_casa_independiente    2    0.9
+                                tipoviv_departamento_en_edificio    2    0.9
+ tipoviv_vivienda_en_casa_de_vecindad_callej_n_solar_o_corral_n_    2    0.9
+                                    tipoviv_vivienda_improvisada    2    0.9
+                                    tipoviv_viviendas_colectivas    2    0.9
+                                      tipoviv_vivienda_en_quinta    2    0.9
+               tipoviv_local_no_destinado_para_habitaci_n_humana    2    0.9
+                        tipoviv_otro_tipo_de_vivienda_particular    2    0.9
+                             ocup_ocupada_con_personas_presentes    2    0.9
+                              ocup_ocupada_con_personas_ausentes    2    0.9
+                                   ocup_ocupada_de_uso_ocasional    2    0.9
+                                      ocup_desocupada_otra_causa    2    0.9
+                            ocup_desocupada_abandonada_o_cerrada    2    0.9
+                    ocup_desocupada_en_construcci_n_o_reparaci_n    2    0.9
+                             ocup_desocupada_en_alquiler_o_venta    2    0.9
+                                              tenencia_alquilada    2    0.9
+                         tenencia_propia_sin_t_tulo_de_propiedad    2    0.9
+                         tenencia_propia_con_t_tulo_de_propiedad    2    0.9
+                                                 tenencia_cedida    2    0.9
+                                             tenencia_otra_forma    2    0.9
+                                           habitaciones_promedio    2    0.9
+                                 viviendas_con_dato_habitaciones    2    0.9
+                                         personas_hogar_promedio    2    0.9
+                                                hogares_con_dato    2    0.9
+                                                 poblacion_total    2    0.9
+                                                     pct_hombres    2    0.9
+                                          viviendas_con_tenencia    2    0.9
+                                                    pct_alquiler    2    0.9
+                                              hacinamiento_proxy    2    0.9
+
+Manzanas completas: 213 (99.1%) 
+Manzanas con al menos 1 NA: 2 (0.9%) 
+
+Manzanas (LLAVE_MZS) con NA:
+[1] "070101000102500047" "070101000102600016"

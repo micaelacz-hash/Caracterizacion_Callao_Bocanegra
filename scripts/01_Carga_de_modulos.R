@@ -69,8 +69,16 @@ leer_frecuencia_redatam <- function(ruta, etiqueta_variable) {
 
     if (!is.na(celda_b) && grepl(area_pat, trimws(celda_b))) {
 
-      area_id       <- sub(area_pat, "\\1", trimws(celda_b))
+      # OJO: el codigo que aparece despues de "AREA # " (celda_b) NO es el
+      # mismo codigo de manzana que usa la cartografia (le sobran 2 ceros al
+      # final). El codigo que SI coincide con el shapefile de manzanas
+      # (campo LLAVE_MZS) es el que va antes de la primera coma en la
+      # descripcion de la manzana (celda C). Verificado contra el shapefile
+      # real: ~97.5% de match exacto (el resto son manzanas "8888", que son
+      # el codigo generico de viviendas dispersas sin manzana asignada y por
+      # lo tanto no tienen poligono propio).
       manzana_label <- m[i, 3]
+      area_id       <- trimws(sub(",.*", "", manzana_label))
       mza           <- sub(".*Mza:\\s*", "", manzana_label)
 
       idx <- i + 2  # fila en blanco en i+1, contenido en i+2
