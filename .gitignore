@@ -4,3 +4,7 @@
 .httr-oauth
 .DS_Store
 .quarto
+
+# Imagenes que Claude envia por el chat durante la conversacion (no son
+# resultados formales del analisis, se quedan solo en esta computadora)
+Claude outputs/
