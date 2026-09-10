@@ -121,7 +121,7 @@ oficial, y debe interpretarse como una aproximación, no como el indicador censa
 oficial.
 
 ## 4. Resultados descriptivos (213 manzanas, base acondicionada final)
-```text
+
 | Indicador | Valor |
 |---|---|
 | Población total | 43,708 habitantes |
@@ -132,7 +132,6 @@ oficial.
 | Tipo de vivienda predominante | Casa independiente (86.7%) |
 | Tenencia — vivienda propia con título | 55.3% |
 | Tenencia — vivienda alquilada | 27.2% |
-```
 
 ## 5. Uso posterior de esta base
 
@@ -142,6 +141,7 @@ Bocanegra). El trabajo de mapeo y sus decisiones de diseño se documentan en un
 repositorio aparte, dedicado al proyecto de QGIS.
 
 ## 6. Estructura del repositorio
+```text
 ├── datos/
 │ ├── crudos/ Exports originales de REDATAM (.xlsx)
 │ └── procesados/ Tablas intermedias y base_acondicionada_final.csv
@@ -153,7 +153,7 @@ repositorio aparte, dedicado al proyecto de QGIS.
 │ ├── reporte_NA_bocanegra.csv / .txt
 │ └── outputs_exploracion_inicial/ Tablas y gráficos exportados
 └── docs/
-
+```
 ## 7. Fuentes
 - Instituto Nacional de Estadística e Informática (INEI) — Censos Nacionales
   2017: XII de Población, VII de Vivienda y III de Comunidades Indígenas, vía
