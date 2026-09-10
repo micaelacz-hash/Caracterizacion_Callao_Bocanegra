@@ -1,34 +1,15 @@
 # ==============================================================================
-# 03_Explorar.R
-# Caracterizacion Callao - Bocanegra
+# Proyecto: Caracterizacion REDATAM Callao - Bocanegra
+# Script: 03_Explorar.R
+# Autora: Micaela Cusipum
+# Fecha: 10-09-26
+#
 #
 # Objetivo: describir la distribucion de las variables de la base ya
 # acondicionada (datos/procesados/base_acondicionada_final.csv), con tablas y
 # graficos, para: poblacion (habitantes, % hombres/mujeres), promedio de
 # habitaciones, promedio de personas por hogar, hacinamiento, tipo de
 # vivienda, y tenencia de la vivienda (% de alquiler).
-#
-# Sigue la misma logica/estructura del script de exploracion de ENAHO que me
-# compartiste (config -> preparacion -> tablas -> graficos -> bivariado ->
-# exportacion masiva), con dos adaptaciones importantes porque la naturaleza
-# de los datos es distinta:
-#
-#   1. La base de ENAHO es a nivel de PERSONA, con codigos numericos (sexo=1/2,
-#      nivel_edu=1..12) que hay que etiquetar. Nuestra base es a nivel de
-#      MANZANA (agregada desde REDATAM/censo), y ya viene con columnas
-#      nombradas (conteos por categoria: tipoviv_casa_independiente,
-#      tenencia_alquilada, etc.), asi que no hace falta un paso de
-#      etiquetado de codigos -- en su lugar, el paso de preparacion aqui es
-#      "alargar" (pivot_longer) esas columnas anchas para poder tabularlas.
-#
-#   2. ENAHO es una encuesta por muestreo, por eso el script usa survey/srvyr
-#      con factor de expansion (factor07), conglomerado y estrato. Nuestra
-#      base viene del Censo (a traves de REDATAM), que ya es el universo
-#      completo de manzanas (no una muestra), asi que NO se aplica diseno
-#      muestral: los conteos se suman directamente, y los promedios que son
-#      "promedio de un promedio por manzana" (habitaciones, personas por
-#      hogar) se ponderan por el numero de viviendas/hogares con dato en
-#      cada manzana (viviendas_con_dato_habitaciones, hogares_con_dato).
 # ==============================================================================
 
 rm(list = ls())
