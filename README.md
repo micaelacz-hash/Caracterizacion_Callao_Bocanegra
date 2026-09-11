@@ -156,7 +156,7 @@ repositorio aparte, dedicado al proyecto de QGIS.
 ```
 ## 7. Fuentes
 - Instituto Nacional de Estadística e Informática (INEI) — Censos Nacionales
-  2017: XII de Población, VII de Vivienda y III de Comunidades Indígenas, vía
+  2017: XII de Población, VII de Viviendas, vía
   REDATAM.
 - GEO GPS PERÚ — cartografía de manzanas con población ("Manzanas_Poblacion"),
   distrito de Callao.
