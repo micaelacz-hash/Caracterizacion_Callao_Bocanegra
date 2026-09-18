@@ -86,6 +86,37 @@ directamente. Los "promedios de promedios" (habitaciones, personas por hogar) se
 ponderan por el número de viviendas/hogares con dato en cada manzana, no por un
 factor muestral.
 
+Incluye además una comparación del % de alquiler de Bocanegra contra el
+distrito de Callao completo (usando `resumen_manzanas_callao.csv`, todas las
+manzanas del distrito, no solo Bocanegra).
+
+### 2.4 `04_Provincia_Callao.R` — Comparación con la provincia de Callao
+
+Incorpora un segundo reporte de REDATAM, a nivel de **distrito** (no de
+manzana): tenencia de la vivienda para los 7 distritos de la Provincia
+Constitucional del Callao (`datos/crudos/tenencia_vivienda_distritos_callao.xlsx`),
+con un bloque `RESUMEN` con el total provincial. El formato de este export es
+distinto al de los archivos por manzana (el bloque describe un distrito, no
+una manzana), por lo que se parsea con un script separado.
+
+Genera `datos/procesados/tenencia_distritos_callao.csv` (tabla larga) y
+`pct_alquiler_distritos_callao.csv` (% de alquiler por distrito), y compara:
+Bocanegra vs. distrito de Callao vs. provincia de Callao (Tabla 8/Gráfico 9),
+y el % de alquiler de cada uno de los 7 distritos de la provincia (Tabla
+9/Gráfico 10).
+
+### 2.5 `05_LimaMetropolitana.R` — Comparación con la provincia de Lima
+
+Incorpora un tercer reporte de REDATAM, también a nivel de distrito, para la
+**Provincia de Lima** (43 distritos, `datos/crudos/tenencia_vivienda_provincia_lima.xlsx`),
+y calcula su % de alquiler (Tabla 10/Gráfico 11).
+
+**Importante:** la Provincia de Callao y la Provincia de Lima se tratan como
+ámbitos **independientes** — el script no las suma en un solo total de "Lima
+Metropolitana"; cada % se calcula con su propio numerador/denominador y se
+muestran como categorías separadas, una junto a la otra, en la misma tabla y
+gráfico.
+
 ## 3. Aclaraciones metodológicas importantes
 
 ### 3.1 Las 2 manzanas sin datos de REDATAM
@@ -133,6 +164,25 @@ oficial.
 | Tenencia — vivienda propia con título | 55.3% |
 | Tenencia — vivienda alquilada | 27.2% |
 
+### 4.1 % de alquiler por ámbito geográfico (comparación)
+
+Cifras independientes, sin sumar entre ámbitos — cada % se calcula como suma
+de viviendas alquiladas ÷ suma de viviendas con dato de tenencia, dentro de
+su propio ámbito.
+
+| Ámbito | % alquiler |
+|---|---|
+| A.H. Bocanegra | 27.2% |
+| Distrito de Callao | 26.3% |
+| Provincia de Callao | 21.1% |
+| Provincia de Lima | 23.9% |
+
+Bocanegra tiene un % de alquiler más alto que el distrito, la provincia de
+Callao y la provincia de Lima. Dentro de la provincia de Callao, La Perla y
+La Punta tienen el % más alto (~32%), mientras que Ventanilla y Mi Perú
+tienen el más bajo (~10%), lo que arrastra el promedio provincial hacia
+abajo (ver `outputs/outputs_exploracion_inicial/Tabla9_AlquilerPorDistrito.png`).
+
 ## 5. Uso posterior de esta base
 
 La base de datos actualizada (Sin NAs) generada en el script 02_Acondicionar será el insumo de entrada para los mapas temáticos elaborados en QGIS
@@ -143,15 +193,19 @@ repositorio aparte, dedicado al proyecto de QGIS.
 ## 6. Estructura del repositorio
 ```text
 ├── datos/
-│ ├── crudos/ Exports originales de REDATAM (.xlsx)
-│ └── procesados/ Tablas intermedias y base_acondicionada_final.csv
+│ ├── crudos/ Exports originales de REDATAM (.xlsx): 6 por manzana (Callao),
+│ │ más tenencia por distrito (Callao) y por distrito (provincia de Lima)
+│ └── procesados/ Tablas intermedias, base_acondicionada_final.csv,
+│ tenencia/pct_alquiler por distrito (Callao y Lima)
 ├── scripts/
-│ ├── 01_importar_datos.R
-│ ├── Acondicionar.R
-│ └── 03_Explorar.R
+│ ├── 01_Carga_de_modulos.R
+│ ├── 02_Acondicionar.R
+│ ├── 03_Explorar.R
+│ ├── 04_Provincia_Callao.R
+│ └── 05_LimaMetropolitana.R
 ├── outputs/
 │ ├── reporte_NA_bocanegra.csv / .txt
-│ └── outputs_exploracion_inicial/ Tablas y gráficos exportados
+│ └── outputs_exploracion_inicial/ Tablas y gráficos exportados (Tabla/Gráfico 1-11)
 └── docs/
 ```
 ## 7. Fuentes
