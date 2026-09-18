@@ -109,7 +109,8 @@ y el % de alquiler de cada uno de los 7 distritos de la provincia (Tabla
 
 Incorpora un tercer reporte de REDATAM, también a nivel de distrito, para la
 **Provincia de Lima** (43 distritos, `datos/crudos/tenencia_vivienda_provincia_lima.xlsx`),
-y calcula su % de alquiler (Tabla 10/Gráfico 11).
+y calcula su % de alquiler (Tabla 10/Gráfico 11), además del desglose por
+cada uno de los 43 distritos (Tabla 11/Gráfico 12).
 
 **Importante:** la Provincia de Callao y la Provincia de Lima se tratan como
 ámbitos **independientes** — el script no las suma en un solo total de "Lima
@@ -183,6 +184,12 @@ La Punta tienen el % más alto (~32%), mientras que Ventanilla y Mi Perú
 tienen el más bajo (~10%), lo que arrastra el promedio provincial hacia
 abajo (ver `outputs/outputs_exploracion_inicial/Tabla9_AlquilerPorDistrito.png`).
 
+Dentro de la provincia de Lima (43 distritos), el % de alquiler varía mucho
+más: desde La Victoria (47%) y Santa Anita (44.2%) hasta Santa Rosa (6.3%) y
+Ancón (6.8%) — ver `outputs/outputs_exploracion_inicial/Tabla11_AlquilerPorDistritoLima.png`.
+El distrito de Lima (Cercado) está en 36.3%, por encima del promedio
+provincial (23.9%).
+
 ## 5. Uso posterior de esta base
 
 La base de datos actualizada (Sin NAs) generada en el script 02_Acondicionar será el insumo de entrada para los mapas temáticos elaborados en QGIS
@@ -205,7 +212,7 @@ repositorio aparte, dedicado al proyecto de QGIS.
 │ └── 05_LimaMetropolitana.R
 ├── outputs/
 │ ├── reporte_NA_bocanegra.csv / .txt
-│ └── outputs_exploracion_inicial/ Tablas y gráficos exportados (Tabla/Gráfico 1-11)
+│ └── outputs_exploracion_inicial/ Tablas y gráficos exportados (Tabla/Gráfico 1-12)
 └── docs/
 ```
 ## 7. Fuentes
