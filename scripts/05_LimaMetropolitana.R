@@ -193,14 +193,50 @@ plot_comparacion_lima <- ggplot(tabla_comparacion_lima %>%
   tema_graficos + theme(legend.position = "none", axis.text.x = element_text(angle = 15, hjust = 1))
 print(plot_comparacion_lima)
 
+# ------------------------------------------------------------------------------
+# 4.1 Tabla 11 / Grafico 12: % de alquiler por distrito (Provincia de Lima) ---
+# ------------------------------------------------------------------------------
+tabla_distritos_lima <- pct_alquiler_provincia_lima %>%
+  filter(distrito != "Provincia de Lima (total)") %>%
+  arrange(desc(pct_alquiler)) %>%
+  transmute(Distrito = distrito,
+            `Viviendas alquiladas (N)` = scales::comma(viviendas_alquiladas),
+            `Viviendas con dato de tenencia (N)` = scales::comma(viviendas_con_tenencia),
+            `% en alquiler` = paste0(pct_alquiler, "%"))
+
+ft_distritos_lima <- formato_flextable(tabla_distritos_lima,
+    "Tabla 11. % de viviendas en alquiler por distrito, Provincia de Lima, Censo 2017") %>%
+  add_footer_lines(values = "Nota: 43 distritos de la Provincia de Lima (sin Callao), ordenados de mayor a menor % de alquiler.") %>%
+  align(align = "justify", part = "footer") %>%
+  fontsize(size = 8, part = "footer")
+print(ft_distritos_lima)
+
+plot_distritos_lima <- ggplot(tabla_distritos_lima %>%
+                                 mutate(pct_num = parse_number(`% en alquiler`),
+                                        es_lima_cercado = Distrito == "Lima"),
+                               aes(x = reorder(Distrito, pct_num), y = pct_num, fill = es_lima_cercado)) +
+  geom_col(alpha = 0.9) +
+  geom_text(aes(label = `% en alquiler`), hjust = -0.15, size = 2.8) +
+  coord_flip() +
+  scale_fill_manual(values = c("TRUE" = "#D73027", "FALSE" = "#8C96A8")) +
+  scale_y_continuous(labels = function(x) paste0(x, "%"), expand = expansion(mult = c(0, 0.2))) +
+  labs(title = "Grafico 12. % de viviendas en alquiler por distrito (Provincia de Lima)",
+       x = "", y = "% de viviendas en alquiler", caption = fuente_caption) +
+  tema_graficos + theme(legend.position = "none", axis.text.y = element_text(size = 7))
+print(plot_distritos_lima)
+
 # ==============================================================================
 # 5. EXPORTACION
 # ==============================================================================
 if (!dir.exists(ruta_salida)) dir.create(ruta_salida, recursive = TRUE)
 
 save_as_image(ft_comparacion_lima, path = file.path(ruta_salida, "Tabla10_ComparacionAlquilerPorAmbito.png"))
+save_as_image(ft_distritos_lima,   path = file.path(ruta_salida, "Tabla11_AlquilerPorDistritoLima.png"))
+
 ggsave(file.path(ruta_salida, "Grafico11_ComparacionAlquilerPorAmbito.jpg"),
        plot = plot_comparacion_lima, width = 8, height = 5, bg = "white")
+ggsave(file.path(ruta_salida, "Grafico12_AlquilerPorDistritoLima.jpg"),
+       plot = plot_distritos_lima, width = 8, height = 12, bg = "white")
 
 cat("\nListo.\n")
 cat("- Tabla larga (tidy, Provincia de Lima):", file.path(dir_procesados, "tenencia_provincia_lima.csv"), "\n")
