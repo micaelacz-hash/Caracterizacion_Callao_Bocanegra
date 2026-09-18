@@ -205,6 +205,40 @@ print(ft_tenencia)
 pct_alquiler_bocanegra <- round(100 * sum(base_limpia$tenencia_alquilada) / sum(base_limpia$viviendas_con_tenencia), 1)
 cat("% de viviendas en alquiler (Bocanegra):", pct_alquiler_bocanegra, "%\n")
 
+# ------------------------------------------------------------------------------
+# 2.7 Comparacion: % de alquiler en Bocanegra vs. distrito de Callao --------------
+# ------------------------------------------------------------------------------
+# Usamos la tabla de TODAS las manzanas del distrito (no solo Bocanegra), generada
+# en 01_importar_datos.R, que ya trae tenencia_alquilada y viviendas_con_tenencia
+# por manzana para el distrito completo (2,686 manzanas).
+base_callao <- read_csv(here("datos", "procesados", "resumen_manzanas_callao.csv"),
+                         locale = locale(encoding = "UTF-8"))
+
+# Mismo criterio que en Bocanegra: suma de alquiladas / suma de viviendas con
+# dato de tenencia (censo = universo completo, no se pondera el promedio por manzana).
+pct_alquiler_callao <- round(100 * sum(base_callao$tenencia_alquilada, na.rm = TRUE) /
+                                sum(base_callao$viviendas_con_tenencia, na.rm = TRUE), 1)
+cat("% de viviendas en alquiler (distrito Callao):", pct_alquiler_callao, "%\n")
+
+tabla_comparacion_alquiler <- tibble(
+  Ambito = c("A.H. Bocanegra", "Distrito de Callao"),
+  `Viviendas alquiladas (N)` = c(sum(base_limpia$tenencia_alquilada),
+                                  sum(base_callao$tenencia_alquilada, na.rm = TRUE)),
+  `Viviendas con dato de tenencia (N)` = c(sum(base_limpia$viviendas_con_tenencia),
+                                            sum(base_callao$viviendas_con_tenencia, na.rm = TRUE))
+) %>%
+  mutate(`% en alquiler` = paste0(round(100 * `Viviendas alquiladas (N)` /
+                                           `Viviendas con dato de tenencia (N)`, 1), "%"),
+         `Viviendas alquiladas (N)` = scales::comma(`Viviendas alquiladas (N)`),
+         `Viviendas con dato de tenencia (N)` = scales::comma(`Viviendas con dato de tenencia (N)`))
+
+ft_comparacion_alquiler <- formato_flextable(tabla_comparacion_alquiler,
+    "Tabla 7. % de viviendas en alquiler: Bocanegra vs. distrito de Callao, Censo 2017") %>%
+  add_footer_lines(values = "Nota: distrito de Callao incluye las 2,686 manzanas de la cartografia censal (Bocanegra es un subconjunto de 213 manzanas, base acondicionada). % calculado como suma de viviendas alquiladas / suma de viviendas con dato de tenencia.") %>%
+  align(align = "justify", part = "footer") %>%
+  fontsize(size = 8, part = "footer")
+print(ft_comparacion_alquiler)
+
 # ==============================================================================
 # 3. GRAFICOS
 # ==============================================================================
@@ -301,6 +335,22 @@ plot_alquiler_hacinamiento <- ggplot(base_limpia, aes(x = pct_alquiler, y = haci
   tema_graficos
 print(plot_alquiler_hacinamiento)
 
+# ------------------------------------------------------------------------------
+# 4.1 Grafico 8: comparacion % alquiler Bocanegra vs. distrito de Callao ---------
+# ------------------------------------------------------------------------------
+plot_comparacion_alquiler <- ggplot(tabla_comparacion_alquiler %>%
+                                       mutate(pct_num = parse_number(`% en alquiler`)),
+                                     aes(x = Ambito, y = pct_num, fill = Ambito)) +
+  geom_col(alpha = 0.85, width = 0.6) +
+  geom_text(aes(label = `% en alquiler`), vjust = -0.5, size = 4) +
+  scale_fill_manual(values = c("A.H. Bocanegra" = "#D73027", "Distrito de Callao" = "#8C96A8")) +
+  scale_y_continuous(labels = function(x) paste0(x, "%"), expand = expansion(mult = c(0, 0.15))) +
+  labs(title = "Grafico 8. % de viviendas en alquiler: Bocanegra vs. distrito de Callao",
+       x = "", y = "% de viviendas en alquiler",
+       caption = "Fuente: INEI - Censos Nacionales 2017 (REDATAM). Distrito de Callao (2,686 manzanas) vs. A.H. Bocanegra (213 manzanas).") +
+  tema_graficos + theme(legend.position = "none")
+print(plot_comparacion_alquiler)
+
 # ==============================================================================
 # 5. EXPORTACION MASIVA (Imagenes para el informe descriptivo)
 # ==============================================================================
@@ -316,6 +366,7 @@ save_as_image(ft_pph,          path = paste0(ruta_salida, "/Tabla3_PersonasPorHo
 save_as_image(ft_hacinamiento, path = paste0(ruta_salida, "/Tabla4_Hacinamiento.png"))
 save_as_image(ft_tipoviv,      path = paste0(ruta_salida, "/Tabla5_TipoVivienda.png"))
 save_as_image(ft_tenencia,     path = paste0(ruta_salida, "/Tabla6_Tenencia.png"))
+save_as_image(ft_comparacion_alquiler, path = paste0(ruta_salida, "/Tabla7_ComparacionAlquilerCallao.png"))
 
 ggsave(paste0(ruta_salida, "/Grafico1_Sexo.jpg"),                  plot = plot_sexo,                 width = 8, height = 5, bg = "white")
 ggsave(paste0(ruta_salida, "/Grafico2_Habitaciones.jpg"),          plot = plot_habitaciones,          width = 8, height = 5, bg = "white")
@@ -324,5 +375,6 @@ ggsave(paste0(ruta_salida, "/Grafico4_Hacinamiento.jpg"),          plot = plot_h
 ggsave(paste0(ruta_salida, "/Grafico5_TipoVivienda.jpg"),          plot = plot_tipoviv,               width = 8, height = 5, bg = "white")
 ggsave(paste0(ruta_salida, "/Grafico6_Tenencia.jpg"),              plot = plot_tenencia,              width = 8, height = 5, bg = "white")
 ggsave(paste0(ruta_salida, "/Grafico7_AlquilerHacinamiento.jpg"),  plot = plot_alquiler_hacinamiento, width = 8, height = 5, bg = "white")
+ggsave(paste0(ruta_salida, "/Grafico8_ComparacionAlquilerCallao.jpg"), plot = plot_comparacion_alquiler, width = 8, height = 5, bg = "white")
 
 cat("\nListo. Tablas y graficos exportados a:", ruta_salida, "\n")
