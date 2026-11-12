@@ -118,6 +118,16 @@ Metropolitana"; cada % se calcula con su propio numerador/denominador y se
 muestran como categorías separadas, una junto a la otra, en la misma tabla y
 gráfico.
 
+### 2.6 `06_Cruce_Zonas.R` — Zona de Bocanegra de cada manzana
+
+Cruza espacialmente `manzanas_bocanegra.gpkg` (215 manzanas) con `ZONAS.shp`
+(lotes con su zona en `nom_local`), ambos en UTM 18S, y genera
+`cruce_zona_censal_zona_bocanegra.csv` (manzana → ZONA 1 a 5) y
+`resumen_zonas_bocanegra.csv` (población, sexo y % de alquiler por zona, sobre las
+213 manzanas con datos). Las capas GIS están fuera del repositorio (OneDrive): la
+ruta se ajusta en `dir_gis` al inicio del script. Método y resultados en las
+secciones 3.2 y 4.2.
+
 ## 3. Aclaraciones metodológicas importantes
 
 ### 3.1 Las 2 manzanas sin datos de REDATAM
@@ -150,10 +160,9 @@ censal del INEI y **no** equivale a las zonas informales "ZONA 1" a "ZONA 5" de
 espacial entre `manzanas_bocanegra.gpkg` (215 manzanas) y `ZONAS.shp` (5,982 lotes
 etiquetados con su zona, ambos en UTM 18S): cada lote se asignó a la manzana que
 contiene su centroide, y cada manzana quedó en la zona que cubre más área de
-lotes. El cruce se hizo fuera de R (script temporal en Python, no incluido en
-`scripts/`); la tabla resultante es `datos/procesados/cruce_zona_censal_zona_bocanegra.csv`
-(una fila por manzana, con la zona asignada, nº de lotes y % del área de la zona
-dominante).
+lotes. El cruce lo hace `scripts/06_Cruce_Zonas.R` (con `sf`); la tabla resultante
+es `datos/procesados/cruce_zona_censal_zona_bocanegra.csv` (una fila por manzana,
+con la zona asignada, nº de lotes y % del área de la zona dominante).
 
 | ZONA censal | Zona de Bocanegra |
 |---|---|
@@ -163,12 +172,11 @@ dominante).
 | 2700 | ZONA 2 (20), ZONA 3 (37) |
 | 2800 | ZONA 4 (15) |
 
-Solo la zona censal 2600 queda repartida entre varias zonas de Bocanegra. Casi
-todas las manzanas caen en una única zona; solo 2 tienen lotes de más de una:
-`070101000102700012` (50 lotes de ZONA 2 y 1 de ZONA 1, asignada a ZONA 2, 99.4%
-del área) y `070101000102600035` (1 lote sin etiqueta, asignada a ZONA 5). Las 2
-manzanas sin dato de REDATAM caen en la ZONA 1. Otros 977 lotes de `ZONAS.shp` no
-se usaron porque su centroide cae fuera de las 215 manzanas.
+Solo la zona censal 2600 queda repartida entre varias zonas de Bocanegra. Todas
+las manzanas caen en una única zona, salvo `070101000102600035`, que tiene 52 lotes
+de ZONA 5 y 1 lote sin etiqueta en `ZONAS.shp` (asignada a ZONA 5, 73.8% del
+área). Las 2 manzanas sin dato de REDATAM caen en la ZONA 1. Otros 225 lotes de
+`ZONAS.shp` no se usaron porque su centroide cae fuera de las 215 manzanas.
 
 ### 3.3 Indicador de hacinamiento (proxy) [en evaluación si realmente usarlo]
 
@@ -248,13 +256,15 @@ repositorio aparte, dedicado al proyecto de QGIS.
 │ │ más tenencia por distrito (Callao) y por distrito (provincia de Lima)
 │ └── procesados/ Tablas intermedias, base_acondicionada_final.csv,
 │ tenencia/pct_alquiler por distrito (Callao y Lima),
-│ cruce_zona_censal_zona_bocanegra.csv (manzana → ZONA 1 a 5)
+│ cruce_zona_censal_zona_bocanegra.csv (manzana → ZONA 1 a 5),
+│ resumen_zonas_bocanegra.csv (población y % alquiler por zona)
 ├── scripts/
 │ ├── 01_Carga_de_modulos.R
 │ ├── 02_Acondicionar.R
 │ ├── 03_Explorar.R
 │ ├── 04_Provincia_Callao.R
-│ └── 05_LimaMetropolitana.R
+│ ├── 05_LimaMetropolitana.R
+│ └── 06_Cruce_Zonas.R
 ├── outputs/
 │ ├── reporte_NA_bocanegra.csv / .txt
 │ └── outputs_exploracion_inicial/ Tablas y gráficos exportados (Tabla/Gráfico 1-12)
