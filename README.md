@@ -142,6 +142,34 @@ independiente para cada una. No se puede confirmar la razón administrativa exac
 sin consultar directamente al INEI. Por este motivo se excluyeron del análisis
 cuantitativo (no se pueden imputar) y se mantienen en los mapas como "Sin dato".
 
+### 3.2 El campo `ZONA` de la base no son las 5 zonas de Bocanegra
+
+El campo `ZONA` de la base (códigos 1600, 2500, 2600, 2700 y 2800) es la zona
+censal del INEI y **no** equivale a las zonas informales "ZONA 1" a "ZONA 5" de
+`ZONAS.shp`. Para obtener la zona de Bocanegra de cada manzana se hizo un cruce
+espacial entre `manzanas_bocanegra.gpkg` (215 manzanas) y `ZONAS.shp` (5,982 lotes
+etiquetados con su zona, ambos en UTM 18S): cada lote se asignó a la manzana que
+contiene su centroide, y cada manzana quedó en la zona que cubre más área de
+lotes. El cruce se hizo fuera de R (script temporal en Python, no incluido en
+`scripts/`); la tabla resultante es `datos/procesados/cruce_zona_censal_zona_bocanegra.csv`
+(una fila por manzana, con la zona asignada, nº de lotes y % del área de la zona
+dominante).
+
+| ZONA censal | Zona de Bocanegra |
+|---|---|
+| 1600 | ZONA 5 (44 manzanas) |
+| 2500 | ZONA 1 (48) |
+| 2600 | ZONA 1 (16), ZONA 4 (18), ZONA 5 (17) |
+| 2700 | ZONA 2 (20), ZONA 3 (37) |
+| 2800 | ZONA 4 (15) |
+
+Solo la zona censal 2600 queda repartida entre varias zonas de Bocanegra. Casi
+todas las manzanas caen en una única zona; solo 2 tienen lotes de más de una:
+`070101000102700012` (50 lotes de ZONA 2 y 1 de ZONA 1, asignada a ZONA 2, 99.4%
+del área) y `070101000102600035` (1 lote sin etiqueta, asignada a ZONA 5). Las 2
+manzanas sin dato de REDATAM caen en la ZONA 1. Otros 977 lotes de `ZONAS.shp` no
+se usaron porque su centroide cae fuera de las 215 manzanas.
+
 ### 3.3 Indicador de hacinamiento (proxy) [en evaluación si realmente usarlo]
 
 `hacinamiento_proxy = personas por hogar promedio / habitaciones promedio` usa el
@@ -190,6 +218,22 @@ Ancón (6.8%) — ver `outputs/outputs_exploracion_inicial/Tabla11_AlquilerPorDi
 El distrito de Lima (Cercado) está en 36.3%, por encima del promedio
 provincial (23.9%).
 
+### 4.2 Población por zona de Bocanegra (213 manzanas con datos)
+
+Según el cruce de la sección 3.2. El total coincide con los 43,708 habitantes de
+la base final.
+
+| Zona | Manzanas | Hombres | Mujeres | Total | % de la población | % alquiler |
+|---|---|---|---|---|---|---|
+| ZONA 1 | 62 | 5,182 | 5,559 | 10,741 | 24.6% | 22.4% |
+| ZONA 2 | 20 | 2,185 | 2,354 | 4,539 | 10.4% | 18.9% |
+| ZONA 3 | 37 | 3,056 | 3,255 | 6,311 | 14.4% | 25.0% |
+| ZONA 4 | 33 | 3,214 | 3,402 | 6,616 | 15.1% | 29.7% |
+| ZONA 5 | 61 | 7,621 | 7,880 | 15,501 | 35.5% | 33.7% |
+
+La ZONA 5 es la más poblada y la de mayor % de alquiler (33.7%); la ZONA 2 es la
+más pequeña y la de menor % de alquiler (18.9%).
+
 ## 5. Uso posterior de esta base
 
 La base de datos actualizada (Sin NAs) generada en el script 02_Acondicionar será el insumo de entrada para los mapas temáticos elaborados en QGIS
@@ -203,7 +247,8 @@ repositorio aparte, dedicado al proyecto de QGIS.
 │ ├── crudos/ Exports originales de REDATAM (.xlsx): 6 por manzana (Callao),
 │ │ más tenencia por distrito (Callao) y por distrito (provincia de Lima)
 │ └── procesados/ Tablas intermedias, base_acondicionada_final.csv,
-│ tenencia/pct_alquiler por distrito (Callao y Lima)
+│ tenencia/pct_alquiler por distrito (Callao y Lima),
+│ cruce_zona_censal_zona_bocanegra.csv (manzana → ZONA 1 a 5)
 ├── scripts/
 │ ├── 01_Carga_de_modulos.R
 │ ├── 02_Acondicionar.R
